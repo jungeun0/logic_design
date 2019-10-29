@@ -9,7 +9,7 @@
 
 
 ## 결과 ### **Top Module 의 DUT/TestBench Code 및 Waveform 검증**
-![](https://github.com/jungeun0/logic_design/commit/75c038a082acd011e4d63a9b6dbe7396aed1f7b4#diff-8bb01f50cdd8caa3a3782adc3482d7bd)
+![](https://github.com/jungeun0/logic_design/commit/00f628e9730e4566201f842117c394973bc47b59)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1MDI2ODIzOV19
+eyJoaXN0b3J5IjpbMTE1ODA2MjkwNV19
 -->
