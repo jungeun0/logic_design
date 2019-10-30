@@ -8,6 +8,7 @@
 : NCO(Numerical Controlled Oscillator) 입력 바꿔서 4초 간격으로 증가하는 코드 테스트
 
 
-## 결과 ### **Top Module 의 DUT/TestBench Code 및 Waveform 검증**
+## 결과 
+### **Top Module 의 DUT/TestBench Code 및 Waveform 검증**
 ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/12312321213213.PNG)
 
