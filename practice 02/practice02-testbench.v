@@ -24,11 +24,11 @@ module tb_prj02;
                      .a (a ),
                      .b (b ),
                      .ci (ci ));                                     
-  fa_case dut_3( .s (s3 ),
-                 .co (co3 ),
-                 .a (a ),
-                 .b (b ),
-                 .ci (ci ));                  
+  fa_case dut_3    ( .s (s3 ),
+                     .co (co3 ),
+                     .a (a ),
+                     .b (b ),
+                     .ci (ci ));                  
                
                
                
