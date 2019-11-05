@@ -4,9 +4,9 @@ module tb_top_cnt_disp;
  reg clk   ; 
  reg rst_n ;
 
- wire   [5:0]o_seg_enb ;
+ wire        [5:0]o_seg_enb ;
  wire			     o_seg_dp  ;
- wire		 [6:0]o_seg     ;
+ wire		      [6:0]o_seg     ;
  
  initial clk = 1'b0; 
  always #(tCK/2) clk = ~clk;
