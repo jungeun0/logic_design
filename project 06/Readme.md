@@ -35,3 +35,4 @@ assign			  six_digit_seg = { 3{seg_left, seg_right} };
 
 ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/12312321213213.PNG)
 
+![](https://github.com/jungeun0/logic_design/blob/master/project%2006/result.jpg)
