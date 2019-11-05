@@ -2,10 +2,10 @@ module dff_asyn(q,
                 d, 
                 clk, 
                 rst_n);
- output q ; 
- input d ; 
- input clk ; 
- input rst_n ;
+ output   q       ; 
+ input    d       ; 
+ input    clk     ;   
+ input    rst_n   ;
  
  reg q ; 
  
@@ -26,12 +26,12 @@ module dff_syn(q,
                rst_n);
                
                
-  output q;
-  input d;
-  input clk;
-  input rst_n;
+  output    q     ;
+  input     d     ;
+  input     clk   ;
+  input     rst_n ;
   
-  reg q;
+  reg       q     ;
   
   always @ (posedge clk)begin
       if (rst_n == 1'b0) begin
