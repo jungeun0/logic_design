@@ -3,9 +3,9 @@ module tb_sequential;
   wire q_dff_asyn;
   wire q_dff_syn;
   
-  reg d;
-  reg clk;
-  reg rst_n;
+  reg d     ;
+  reg clk   ;
+  reg rst_n ;
   
   initial clk = 1'b0;
   always #(100) clk = ~clk;
@@ -20,7 +20,7 @@ module tb_sequential;
                .clk(clk),
                .rst_n(rst_n));     
                          
- dff_syn dut2(.q(q_dff_syn),
+ dff_syn dut2( .q(q_dff_syn),
                .d(d),
                .clk(clk),
                .rst_n(rst_n));
