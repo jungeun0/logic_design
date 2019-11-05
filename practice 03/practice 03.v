@@ -4,10 +4,10 @@ module mux2to1_cond ( out,
                       sel  );
                      
                      
-  output out;
-  input in0;
-  input in1;
-  input sel;
+  output  out;
+  input   in0;
+  input   in1;
+  input   sel;
 
   assign out = (sel)? in1 : in0 ;
 
@@ -19,12 +19,12 @@ module mux2to1_if( out,
                    in1,
                    sel );
                    
-  output out;
-  input in0;
-  input in1;
-  input sel;
+  output  out;
+  input   in0;
+  input   in1;
+  input   sel;
   
-  reg out;
+  reg     out;
   
   
   always @(*)begin
@@ -43,10 +43,10 @@ module mux2to1_case (  out,
                        in1,
                        sel );
                        
-  output out;
-  input in0;
-  input in1;
-  input sel;                       
+  output  out;
+  input   in0;
+  input   in1;
+  input   sel;                       
               
   reg out;
   
