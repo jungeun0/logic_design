@@ -1,14 +1,14 @@
 module tb3;
   
   reg [2:0] in;
-  reg  en;
+  reg       en;
 
   wire [7:0] out1;
   wire [7:0] out2;
   
   dec3to8_shift dut_1(.out (out1),
-                  .in (in),
-                  .en (en));
+                      .in (in),
+                      .en (en));
                                    
   dec3to8_case dut_2( .out (out2),
                       .in (in),
@@ -19,7 +19,7 @@ module tb3;
 
  initial begin
    $display("using shift: in,en");
-   $display("using case: in,en");
+   $display("using case : in,en");
 
    $display(" ========================================== ");
    $display(" en in out1 out2 ");
