@@ -1,15 +1,15 @@
 
-module tb2;
+module tb2  ;
   
   reg [3:0]a;
   reg [3:0]b;
-  reg ci;
+  reg     ci;
 
-  wire [3:0]s1;
-  wire co1;
+  wire [3:0]s1  ;
+  wire      co1 ;
 
-  wire [3:0]s2;
-  wire co2;
+  wire [3:0]s2  ;
+  wire      co2 ;
 
 
   fa4_inst dut_1( .s (s1 ),
