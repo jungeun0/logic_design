@@ -1,16 +1,16 @@
 
-module fa_dataflow ( s,
-                    co,
-                    a,
-                    b,
-                    ci  );
+module fa_dataflow (  s,
+                      co,
+                      a,
+                      b,
+                      ci  );
 
-  output s; //sum
-  output co; //carry out
+  output  s ; //sum
+  output  co; //carry out
 
-  input a; //input a
-  input b; //input b
-  input ci; //input carry in
+  input   a ; //input a
+  input   b ; //input b
+  input   ci; //input carry in
 
   assign s =((~a&~b&ci)|(~a&b&~ci)|(a&b&ci)|(a&~b&~ci));//dataflow revel
   assign co = ((a&b)|(b&ci)|(a&ci));
@@ -23,14 +23,14 @@ module fa_behavior (s,
                     a,
                     b,
                     ci );
-  output s; //sum
-  output co; //carry out
+  output  s ; //sum
+  output  co; //carry out
 
-  input a; //input a
-  input b; //input b
+  input a ; //input a
+  input b ; //input b
   input ci; //input carry in
   
-  reg s; // output of always
+  reg s ; // output of always
   reg co;
   
   always @(ci,a,b)begin
@@ -45,14 +45,14 @@ module fa_case ( s,
                  a,
                  b,
                  ci );
-  output s; //sum
+  output s  ; //sum
   output co; //carry out
 
-  input a; //input a
-  input b; //input b
+  input a ; //input a
+  input b ; //input b
   input ci; //input carry in
   
-  reg s; // output of always
+  reg s ; // output of always
   reg co;              
   
   always @(ci,a,b)begin
