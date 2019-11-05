@@ -1,13 +1,13 @@
 module d_latch(q, 
                d, 
                clk, 
-               rst_n);
-  output q ; 
-  input d ; 
-  input clk ; 
-  input rst_n ;
+               rst_n);
+  output  q     ; 
+  input   d     ; 
+  input   clk   ; 
+  input   rst_n ;
   	
- 	reg q ; 
+ 	reg     q     ; 
  	
  	always @ (d or clk or rst_n) begin 
  	 if(rst_n == 1'b0) 
@@ -18,5 +18,5 @@ module d_latch(q,
  	    q <= d ; 
  	  end 
  	end 
- end 
+end 
 endmodule 
