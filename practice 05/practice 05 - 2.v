@@ -3,11 +3,11 @@ module cnt6( out,
              clk, 
              rst_n);
              
- output [5:0] out ; 
- input clk ; 
- input rst_n ;
+ output [5:0] out   ; 
+ input        clk   ; 
+ input        rst_n ;
 
- reg [5:0] out ; 
+  reg [5:0]    out  ; 
  
  always @(posedge clk or negedge rst_n) begin 
   if(rst_n == 1'b0) begin 
@@ -28,8 +28,8 @@ module tb_cnt;
   
   parameter tCK = 1000/50;
   
-  reg clk;
-  reg rst_n;
+  reg clk   ;
+  reg rst_n ;
  
   wire [5:0] out;
   
@@ -59,13 +59,13 @@ module nco( clk_gen,
 
  output clk_gen ;// 1Hz CLK
 
- input [31:0] num ; 
- input clk ;// 50Mhz CLK input rst_n ;
- input rst_n;
+ input [31:0] num   ; 
+ input        clk   ;// 50Mhz CLK input rst_n ;
+ input        rst_n ;
  
  
- reg [31:0] cnt ; 
- reg clk_gen ; 
+ reg [31:0]   cnt     ; 
+ reg          clk_gen ; 
  
  always @(posedge clk or negedge rst_n) begin 
   if(rst_n == 1'b0) begin 
@@ -91,11 +91,11 @@ module top_cnt( out,
 
  output [5:0] out ;
 
- input [31:0] num ; 
- input clk ; 
- input rst_n ;
+ input [31:0] num     ; 
+ input        clk     ; 
+ input        rst_n   ;
 
- wire clk_gen ;
+ wire         clk_gen ;
  
  nco u_nco( .clk_gen ( clk_gen ), 
             .num ( num ), 
@@ -115,7 +115,7 @@ endmodule
 module tb_top_cnt;
  parameter tCK = 1000/50 ; // 50MHz Clock
 
- reg clk ; 
+ reg clk   ; 
  reg rst_n ;
 
  wire [5:0] out ;
