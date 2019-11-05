@@ -2,24 +2,24 @@ module dec3to8_shift( out,
                       in,
                       en );
                       
-  output [7:0] out;
-  input [2:0] in;
-  input  en;
+  output  [7:0] out ;
+  input   [2:0] in  ;
+  input         en  ;
   
   assign out = (en == 1'b1)? 8'd2<<in : 8'd0 ;
   
 endmodule
 
 
-module dec3to8_case( out,
+module dec3to8_case(  out,
                       in,
                       en );
                       
-  output [7:0] out;
-  input  [2:0] in;
-  input  en;
+  output [7:0]  out ;
+  input  [2:0]  in  ;
+  input         en  ;
   
-  reg[7:0] out;
+  reg    [7:0]  out;
   
   always @(*) begin
     if (en == 1'b1) begin
