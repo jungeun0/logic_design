@@ -18,12 +18,12 @@
 //	--------------------------------------------------
 //	0~59 Counter
 //	--------------------------------------------------
-module cnt60(	o_cnt60,
+module cnt60(			o_cnt60,
 				clk,
 				rst_n);
 
-output	[5:0]	o_cnt60		;
-input			clk			;
+output	[5:0]		o_cnt60		;
+input			clk		;
 input			rst_n		;
 
 reg		[5:0]	o_cnt60		;
@@ -52,19 +52,19 @@ module	nco(	o_gen_clk,
 
 output			o_gen_clk	;	// 1Hz CLK
 
-input	[31:0]	i_nco_num	;
-input			clk			;	// 50Mhz CLK
+input		[31:0]	i_nco_num	;
+input			clk		;	// 50Mhz CLK
 input			rst_n		;
 
-reg		[31:0]	cnt			;
-reg				o_gen_clk	;
+reg		[31:0]	cnt		;
+reg			o_gen_clk	;
 always @(posedge clk or negedge rst_n) begin
 	if(rst_n == 1'b0) begin
 		cnt		<= 32'd0;
 		o_gen_clk	<= 1'd0	;
 	end else begin
 		if(cnt >= i_nco_num/2-1) begin
-			cnt 	<= 32'd0;
+			cnt 		<= 32'd0;
 			o_gen_clk	<= ~o_gen_clk;
 		end else begin
 			cnt <= cnt + 1'b1;
@@ -86,16 +86,16 @@ module	nco_cnt(
 output	[5:0]	o_nco_cnt	;
 
 input	[31:0]	i_nco_num	;
-input			clk			;
-input			rst_n		;
+input		clk		;
+input		rst_n		;
 
-wire			gen_clk		;
-nco		u_nco(	.o_gen_clk	( gen_clk	),
+wire		gen_clk		;
+nco		  u_nco(	.o_gen_clk	( gen_clk	),
 				.i_nco_num	( i_nco_num	),
 				.clk		( clk		),
 				.rst_n		( rst_n		));
 
-cnt60	u_cnt60(.o_cnt60	( o_nco_cnt	),
+cnt60	         u_cnt60(	.o_cnt60	( o_nco_cnt	),
 				.clk		( gen_clk	),
 				.rst_n		( rst_n		));
 
@@ -166,19 +166,19 @@ module	led_disp(
 				rst_n);
 
 output	[5:0]	o_seg_enb	      ;
-output      	o_seg_dp	       ;
-output	[6:0]	o_seg		         ;
+output      	o_seg_dp	      ;
+output	[6:0]	o_seg		      ;
 
 input	[41:0]	i_six_digit_seg	;
-input	[5:0]	i_six_dp	       	;
-input			clk		              		;
-input			rst_n		             	;
+input	[5:0]	i_six_dp	;
+input		clk		;
+input		rst_n		;
 
-wire			gen_clk	             	;
+wire		gen_clk	        ;
 nco		u_nco(	.o_gen_clk	( gen_clk		),
-				.i_nco_num	( 32'd50000	),
-				.clk		( clk			),
-				.rst_n		( rst_n			));
+		        .i_nco_num	( 32'd5000000	        ),
+			.clk		( clk			),
+			.rst_n		( rst_n			));
 
 reg		[3:0]	cnt_common_node	;
 always @(posedge gen_clk or negedge rst_n) begin
@@ -242,16 +242,16 @@ module	top_nco_cnt_disp(
 				rst_n);
 
 output	[5:0]	o_seg_enb	;
-output	      o_seg_dp	 ;
+output	        o_seg_dp        ;
 output	[6:0]	o_seg	   	;
 
-input			clk			 ;
+input			clk             ;
 input			rst_n		;
 
 wire [5:0] nco_cnt;
 nco_cnt u_nct(
                 .o_nco_cnt   (nco_cnt),
-                .i_nco_num   (32'd500000),
+	        .i_nco_num   (32'd50000000),
                 .clk         (clk),
                 .rst_n       (rst_n));
                           
@@ -259,7 +259,7 @@ wire [3:0]left;
 wire [3:0]right;
                           
 double_fig_sep u_dfs(
-                     .o_left       (left),
+                    			     .o_left       (left),
 				             .o_right      (right),
 				             .i_double_fig (nco_cnt));                          
 wire [6:0] seg_left;
@@ -278,7 +278,7 @@ wire [41:0] six_digit_seg;
 assign six_digit_seg = {{4{7'b0000000}},seg_left,seg_right};
                     
 led_disp u_disp( 
-                 .o_seg           (o_seg),
+                 			.o_seg           (o_seg),
 			          	.o_seg_dp        (o_seg_dp),
 		           		.o_seg_enb       (o_seg_enb),
 		           		.i_six_digit_seg (six_digit_seg),
