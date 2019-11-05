@@ -1,19 +1,19 @@
 module tb_prj02;
   
-  reg a;
-  reg b;
+  reg a ;
+  reg b ;
   reg ci;
 
-  wire s1;
+  wire s1 ;
   wire co1;
 
-  wire s2;
+  wire s2 ;
   wire co2;
 
-  wire s3;
+  wire s3 ;
   wire co3;
 
-  fa_dataflow dut_1( .s (s1 ),sim:/tb_prj02/a sim:/tb_prj02/b sim:/tb_prj02/ci sim:/tb_prj02/s1 sim:/tb_prj02/co1 sim:/tb_prj02/s2 sim:/tb_prj02/co2 sim:/tb_prj02/s3 sim:/tb_prj02/co3 sim:/tb_prj02/dut_1 sim:/tb_prj02/dut_2 sim:/tb_prj02/dut_3
+  fa_dataflow dut_1( .s (s1 ),
                      .co (co1 ),
                      .a (a ),
                      .b (b ),
