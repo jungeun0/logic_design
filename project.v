@@ -2,7 +2,7 @@
 //	==================================================
 //	Copyright (c) 2019 Sookmyung Women's University.
 //	--------------------------------------------------
-//	FILE 			: practice07.v
+//	FILE 			: dut.v
 //	DEPARTMENT		: EE
 //	AUTHOR			: WOONG CHOI
 //	EMAIL			: woongchoi@sookmyung.ac.kr
@@ -10,7 +10,7 @@
 //	RELEASE HISTORY
 //	--------------------------------------------------
 //	VERSION			DATE
-//	0.0			2019-11-09
+//	0.0			2019-11-18
 //	--------------------------------------------------
 //	PURPOSE			: Digital Clock
 //	==================================================
@@ -64,17 +64,17 @@ reg	[6:0]	o_seg		;
 //making
 always @(i_num) begin 
  	case(i_num) 
- 		4'd0 : o_seg = 7'b111_1110	; 
- 		4'd1 : o_seg = 7'b011_0000	; 
- 		4'd2 : o_seg = 7'b110_1101	; 
- 		4'd3 : o_seg = 7'b111_1001	; 
- 		4'd4 : o_seg = 7'b011_0011	; 
- 		4'd5 : o_seg = 7'b101_1011	; 
- 		4'd6 : o_seg = 7'b101_1111	; 
- 		4'd7 : o_seg = 7'b111_0000	; 
- 		4'd8 : o_seg = 7'b111_1111	; 
- 		4'd9 : o_seg = 7'b111_0011	; 
-		default : o_seg = 7'b000_0000	; 
+ 		4'd0:	o_seg = 7'b111_1110; 
+ 		4'd1:	o_seg = 7'b011_0000; 
+ 		4'd2:	o_seg = 7'b110_1101; 
+ 		4'd3:	o_seg = 7'b111_1001; 
+ 		4'd4:	o_seg = 7'b011_0011; 
+ 		4'd5:	o_seg = 7'b101_1011; 
+ 		4'd6:	o_seg = 7'b101_1111; 
+ 		4'd7:	o_seg = 7'b111_0000; 
+ 		4'd8:	o_seg = 7'b111_1111; 
+ 		4'd9:	o_seg = 7'b111_0011; 
+		default:o_seg = 7'b000_0000; 
 	endcase 
 end
 
@@ -112,20 +112,20 @@ module	led_disp(
 		rst_n);
 
 output	[5:0]	o_seg_enb		;
-output		o_seg_dp		;
-output	[6:0]	o_seg			;
-
+output		o_seg_dp				;
+output	[6:0]	o_seg				;
+	
 input	[41:0]	i_six_digit_seg		;
-input	[5:0]	i_six_dp		;
-input		clk			;
-input		rst_n			;
+input	[5:0]		i_six_dp					;
+input				clk						;
+input				rst_n						;
 
-wire		gen_clk		;
+wire				gen_clk					;	
 
 nco		u_nco(
 		.o_gen_clk	( gen_clk	),
 		.i_nco_num	( 32'd5000	),
-		.clk		( clk		),
+		.clk			( clk			),
 		.rst_n		( rst_n		));
 
 
@@ -147,12 +147,13 @@ reg	[5:0]	o_seg_enb		;
 
 always @(cnt_common_node) begin
 	case (cnt_common_node)
-		4'd0 : o_seg_enb = 6'b111110;
-		4'd1 : o_seg_enb = 6'b111101;
-		4'd2 : o_seg_enb = 6'b111011;
-		4'd3 : o_seg_enb = 6'b110111;
-		4'd4 : o_seg_enb = 6'b101111;
-		4'd5 : o_seg_enb = 6'b011111;
+		4'd0:	o_seg_enb = 6'b111110;
+		4'd1:	o_seg_enb = 6'b111101;
+		4'd2:	o_seg_enb = 6'b111011;
+		4'd3:	o_seg_enb = 6'b110111;
+		4'd4:	o_seg_enb = 6'b101111;
+		4'd5:	o_seg_enb = 6'b011111;
+		default:o_seg_enb = 6'b111111;
 	endcase
 end
 
@@ -160,12 +161,13 @@ reg		o_seg_dp		;
 
 always @(cnt_common_node) begin
 	case (cnt_common_node)
-		4'd0 : o_seg_dp = i_six_dp[0];
-		4'd1 : o_seg_dp = i_six_dp[1];
-		4'd2 : o_seg_dp = i_six_dp[2];
-		4'd3 : o_seg_dp = i_six_dp[3];
-		4'd4 : o_seg_dp = i_six_dp[4];
-		4'd5 : o_seg_dp = i_six_dp[5];
+		4'd0:	o_seg_dp = i_six_dp[0];
+		4'd1:	o_seg_dp = i_six_dp[1];
+		4'd2:	o_seg_dp = i_six_dp[2];
+		4'd3:	o_seg_dp = i_six_dp[3];
+		4'd4:	o_seg_dp = i_six_dp[4];
+		4'd5:	o_seg_dp = i_six_dp[5];
+		default:o_seg_dp = 1'b0;
 	endcase
 end
 
@@ -173,12 +175,13 @@ reg	[6:0]	o_seg			;
 
 always @(cnt_common_node) begin
 	case (cnt_common_node)
-		4'd0 : o_seg = i_six_digit_seg[6:0];
-		4'd1 : o_seg = i_six_digit_seg[13:7];
-		4'd2 : o_seg = i_six_digit_seg[20:14];
-		4'd3 : o_seg = i_six_digit_seg[27:21];
-		4'd4 : o_seg = i_six_digit_seg[34:28];
-		4'd5 : o_seg = i_six_digit_seg[41:35];
+		4'd0:	o_seg = i_six_digit_seg[6:0];
+		4'd1:	o_seg = i_six_digit_seg[13:7];
+		4'd2:	o_seg = i_six_digit_seg[20:14];
+		4'd3:	o_seg = i_six_digit_seg[27:21];
+		4'd4:	o_seg = i_six_digit_seg[34:28];
+		4'd5:	o_seg = i_six_digit_seg[41:35];
+		default:o_seg = 7'b111_1110; // 0 display
 	endcase
 end
 
@@ -249,23 +252,32 @@ endmodule
 module	controller(
 		o_mode,
 		o_position,
+		o_alarm_en,
 		o_sec_clk,
 		o_min_clk,
 		o_hou_clk,
+		o_alarm_sec_clk,
+		o_alarm_min_clk,
+		o_alarm_hou_clk,
 		i_max_hit_sec,
 		i_max_hit_min,
 		i_max_hit_hou,
 		i_sw0,
 		i_sw1,
 		i_sw2,
+		i_sw3,
 		clk,
 		rst_n);
 
-output		o_mode			;
-output		o_position		;
-output		o_sec_clk		;
-output		o_min_clk		;
-output		o_hou_clk		;
+output	[1:0]	o_mode			;
+output		o_position			;
+output		o_alarm_en			;
+output		o_sec_clk			;
+output		o_min_clk			;
+output		o_hou_clk			;
+output		o_alarm_sec_clk		;
+output		o_alarm_min_clk		;
+output		o_alarm_hou_clk		;
 
 input		i_max_hit_sec		;
 input		i_max_hit_min		;
@@ -274,16 +286,17 @@ input		i_max_hit_hou		;
 input		i_sw0			;
 input		i_sw1			;
 input		i_sw2			;
+input		i_sw3			;
 
 input		clk			;
 input		rst_n			;
 
-parameter	MODE_CLOCK = 1'b0	;
-parameter	MODE_SETUP = 1'b1	;
-
-parameter	POS_SEC	= 2'd0		;
-parameter	POS_MIN	= 2'd1		;
-parameter	POS_HOU	= 2'd2		;
+parameter	MODE_CLOCK	= 2'b00	;
+parameter	MODE_SETUP	= 2'b01	;
+parameter	MODE_ALARM	= 2'b10	;
+parameter	POS_SEC		= 2'b00	;
+parameter	POS_MIN		= 2'b01	;
+parameter 	POS_HOU  	= 2'b10 	;
 
 wire		clk_100hz		;
 nco		u0_nco(
@@ -310,24 +323,44 @@ debounce	u2_debounce(
 		.i_sw		( i_sw2		),
 		.clk		( clk_100hz	));
 
-reg		o_mode			;
-always @(posedge i_sw0 or negedge rst_n) begin
+wire		sw3			;
+debounce	u3_debounce(
+		.o_sw		( sw3		),
+		.i_sw		( i_sw3		),
+		.clk		( clk_100hz	));
+
+reg	[1:0]	o_mode			;
+always @(posedge sw0 or negedge rst_n) begin
 	if(rst_n == 1'b0) begin
 		o_mode <= MODE_CLOCK;
 	end else begin
-		o_mode <= o_mode + 1'b1;
+		if(o_mode >= MODE_ALARM) begin
+			o_mode <= MODE_CLOCK;
+		end else begin
+			o_mode <= o_mode + 1'b1;
+		end
 	end
 end
 
-reg		o_position		;
-always @(posedge i_sw1 or negedge rst_n) begin
+reg	[1:0]o_position		;
+always @(posedge sw1 or negedge rst_n) begin
 	if(rst_n == 1'b0) begin
 		o_position <= POS_SEC;
 	end else begin
-		o_position <= o_position + 2'd1;
-		if(o_position == 2'd3)begin
-			o_position <= o_position + 1'd1;
+		if(o_position >= POS_HOU) begin
+			o_position <= POS_SEC;
+		end else begin
+			o_position <= o_position + 1'b1;
 		end
+	end
+end
+
+reg		o_alarm_en		;
+always @(posedge sw3 or negedge rst_n) begin
+	if(rst_n == 1'b0) begin
+		o_alarm_en <= 1'b0;
+	end else begin
+		o_alarm_en <= o_alarm_en + 1'b1;
 	end
 end
 
@@ -340,25 +373,83 @@ nco		u1_nco(
 
 reg		o_sec_clk		;
 reg		o_min_clk		;
-reg		o_hou_clk		;
+reg  		o_hou_clk  		;
+reg		o_alarm_sec_clk		;
+reg		o_alarm_min_clk		;
+reg  		o_alarm_hou_clk 		 ;
 always @(*) begin
 	case(o_mode)
 		MODE_CLOCK : begin
 			o_sec_clk = clk_1hz;
 			o_min_clk = i_max_hit_sec;
-			o_hou_clk = i_max_hit_hou;
+			o_hou_clk = i_max_hit_min;
+			o_alarm_sec_clk = 1'b0;
+			o_alarm_min_clk = 1'b0;
+			o_alarm_hou_clk = 1'b0;
 		end
 		MODE_SETUP : begin
 			case(o_position)
 				POS_SEC : begin
-					o_sec_clk = ~i_sw2;
+					o_sec_clk = ~sw2;
 					o_min_clk = 1'b0;
+					o_hou_clk = 1'b0;
+					o_alarm_sec_clk = 1'b0;
+					o_alarm_min_clk = 1'b0;
+					o_alarm_hou_clk = 1'b0;
 				end
 				POS_MIN : begin
 					o_sec_clk = 1'b0;
-					o_min_clk = ~i_sw2;
+					o_min_clk = ~sw2;
+					o_hou_clk = 1'b0;
+					o_alarm_sec_clk = 1'b0;
+					o_alarm_min_clk = 1'b0;
+					o_alarm_hou_clk = 1'b0;
+				end
+				POS_HOU : begin
+				  o_sec_clk = 1'b0;
+					o_min_clk = 1'b0;
+					o_hou_clk = ~sw2;
+					o_alarm_sec_clk = 1'b0;
+					o_alarm_min_clk = 1'b0;
+					o_alarm_hou_clk = 1'b0;
 				end
 			endcase
+		end
+		MODE_ALARM : begin
+			case(o_position)
+				POS_SEC : begin
+					o_sec_clk = clk_1hz;
+					o_min_clk = i_max_hit_sec;
+					o_hou_clk = i_max_hit_min;
+					o_alarm_sec_clk = ~sw2;
+					o_alarm_min_clk = 1'b0;
+					o_alarm_hou_clk = 1'b0;
+				end
+				POS_MIN : begin
+					o_sec_clk = clk_1hz;
+					o_min_clk = i_max_hit_sec;
+					o_hou_clk = i_max_hit_min;
+					o_alarm_sec_clk = 1'b0;
+					o_alarm_min_clk = ~sw2;
+					o_alarm_hou_clk = 1'b0;
+				end
+				POS_HOU : begin
+				  o_sec_clk = clk_1hz;
+					o_min_clk = i_max_hit_sec;
+					o_hou_clk = i_max_hit_min;
+					o_alarm_sec_clk = 1'b0;
+					o_alarm_min_clk = 1'b0;
+					o_alarm_hou_clk = ~sw2;
+				end
+			endcase
+		end
+		default: begin
+			o_sec_clk = 1'b0;
+			o_min_clk = 1'b0;
+			o_hou_clk = 1'b0;
+			o_alarm_sec_clk = 1'b0;
+			o_alarm_min_clk = 1'b0;
+			o_alarm_hou_clk = 1'b0;
 		end
 	endcase
 end
@@ -368,104 +459,294 @@ endmodule
 //	--------------------------------------------------
 //	HMS(Hour:Min:Sec) Counter
 //	--------------------------------------------------
-module	houminsec(	o_sec,
-			o_min,
-			o_hou,
-			o_max_hit_sec,
-			o_max_hit_min,
-			o_max_hit_hou,
-			i_sec_clk,
-			i_min_clk,
-			i_hou_clk,
-			clk,
-			rst_n);
+module	houminsec(	
+		o_sec,
+		o_min,
+		o_hou,
+		o_max_hit_sec,
+		o_max_hit_min,
+		o_max_hit_hou,
+		o_alarm,
+		i_mode,
+		i_position,
+		i_sec_clk,
+		i_min_clk,
+		i_hou_clk,
+		i_alarm_sec_clk,
+		i_alarm_min_clk,
+		i_alarm_hou_clk,
+		i_alarm_en,
+		clk,
+		rst_n);
 
 output	[5:0]	o_sec		;
 output	[5:0]	o_min		;
-output  [5:0]	o_hou		;
+output [5:0] o_hou  ;
 output		o_max_hit_sec	;
 output		o_max_hit_min	;
-output		o_max_hit_hou	;
+output  		o_max_hit_hou ;
+output		o_alarm		;
 
+input	[1:0]	i_mode		;
+input		i_position	;
 input		i_sec_clk	;
 input		i_min_clk	;
-input		i_hou_clk	;
+input 	 i_hou_clk 	;
+input		i_alarm_sec_clk	;
+input		i_alarm_min_clk	;
+input  	i_alarm_hou_clk 	;
+input		i_alarm_en	;
 
 input		clk		;
 input		rst_n		;
 
-hms_cnt		u0_hms_cnt(
-		.o_hms_cnt	( o_sec		),
-		.o_max_hit	( o_max_hit_sec	),
-		.i_max_cnt	( 6'd59		),
-		.clk		( i_sec_clk	),
-		.rst_n		( rst_n		));
+parameter	MODE_CLOCK	= 2'b00	;
+parameter	MODE_SETUP	= 2'b01	;
+parameter	MODE_ALARM	= 2'b10	;
+parameter	POS_SEC		= 2'd0	;
+parameter	POS_MIN		= 2'd1	;
+parameter POS_HOU  = 2'd2 ; 
 
-hms_cnt		u1_hms_cnt(
-		.o_hms_cnt	( o_min		),
-		.o_max_hit	( o_max_hit_min	),
-		.i_max_cnt	( 6'd59		),
-		.clk		( i_min_clk	),
-		.rst_n		( rst_n		));
+//	MODE_CLOCK
+wire	[5:0]	sec		;
+wire		max_hit_sec	;
+hms_cnt		u_hms_cnt_sec(
+		.o_hms_cnt	( sec			),
+		.o_max_hit	( o_max_hit_sec		),
+		.i_max_cnt	( 6'd59			),
+		.clk		( i_sec_clk		),
+		.rst_n		( rst_n			));
 
-hms_cnt		u2_hms_cnt(
-		.o_hms_cnt	( o_hou		),
-		.o_max_hit	( o_max_hit_hou ),
-		.i_max_cnt	( 6'd24		),
-		.clk		( i_hou_clk	),
-		.rst_n		( rst_n		));
+wire	[5:0]	min		;
+wire		max_hit_min	;
+hms_cnt		u_hms_cnt_min(
+		.o_hms_cnt	( min			),
+		.o_max_hit	( o_max_hit_min		),
+		.i_max_cnt	( 6'd59			),
+		.clk		( i_min_clk		),
+		.rst_n		( rst_n			));
+wire [5:0] hou  ;
+wire  max_hit_hou ;
+hms_cnt		u_hms_cnt_hou(
+		.o_hms_cnt	( hou			),
+		.o_max_hit	( o_max_hit_hou		),
+		.i_max_cnt	( 6'd24			),
+		.clk		( i_hou_clk		),
+		.rst_n		( rst_n			));
+
+wire	[5:0]	alarm_sec	;
+//	MODE_ALARM
+hms_cnt		u_hms_cnt_alarm_sec(
+		.o_hms_cnt	( alarm_sec		),
+		.o_max_hit	( 			),
+		.i_max_cnt	( 6'd59			),
+		.clk		( i_alarm_sec_clk	),
+		.rst_n		( rst_n			));
+
+wire	[5:0]	alarm_min	;
+hms_cnt		u_hms_cnt_alarm_min(
+		.o_hms_cnt	( alarm_min		),
+		.o_max_hit	( 			),
+		.i_max_cnt	( 6'd59			),
+		.clk		( i_alarm_min_clk	),
+		.rst_n		( rst_n			));
+
+wire	[5:0]	alarm_hou	;
+hms_cnt		u_hms_cnt_alarm_hou(
+		.o_hms_cnt	( alarm_hou		),
+		.o_max_hit	( 			),
+		.i_max_cnt	( 6'd23			),
+		.clk		( i_alarm_hou_clk	),
+		.rst_n		( rst_n			));
+
+reg	[5:0]	o_sec		;
+reg	[5:0]	o_min		;
+reg 	[5:0] o_hou 	;
+
+always @ (*) begin
+	case(i_mode)
+		MODE_CLOCK: begin
+			o_sec	= sec;
+			o_min	= min;
+			o_hou = hou;
+		end
+		MODE_SETUP:	begin
+			o_sec	= sec;
+			o_min	= min;
+			o_hou = hou;
+		end
+		MODE_ALARM:	begin
+			o_sec	= alarm_sec;
+			o_min	= alarm_min;
+			o_hou = alarm_hou;
+		end
+	endcase
+end
+
+reg		o_alarm		;
+always @ (posedge clk or negedge rst_n) begin
+	if (rst_n == 1'b0) begin
+		o_alarm <= 1'b0;
+	end else begin
+		if( (sec == alarm_sec) && (min == alarm_min)	&& (hou == alarm_hou)) begin
+			o_alarm <= 1'b1 & i_alarm_en;
+		end else begin
+			o_alarm <= o_alarm & i_alarm_en;
+		end
+	end
+end
 
 endmodule
 
-module	top_hms_clock(
-		o_seg_enb,
+module	buzz(
+		o_buzz,
+		i_buzz_en,
+		clk,
+		rst_n);
+
+output		o_buzz		;
+
+input		i_buzz_en	;
+input		clk		;
+input		rst_n		;
+
+parameter	C = 191113	;
+parameter	D = 170262	;
+parameter	E = 151686	;
+parameter	F = 143173	;
+parameter	G = 63776	;
+parameter	A = 56818	;
+parameter	B = 50619	;
+
+wire		clk_beat		;
+nco	u_nco_bit(	
+		.o_gen_clk	( clk_beat	),
+		.i_nco_num	( 25000000	),
+		.clk		( clk		),
+		.rst_n		( rst_n		));
+
+reg	[4:0]	cnt		;
+always @ (posedge clk_beat or negedge rst_n) begin
+	if(rst_n == 1'b0) begin
+		cnt <= 5'd0;
+	end else begin
+		if(cnt >= 5'd24) begin
+			cnt <= 5'd0;
+		end else begin
+			cnt <= cnt + 1'd1;
+		end
+	end
+end
+
+reg	[31:0]	nco_num		;
+always @ (*) begin
+	case(cnt)
+		5'd00: nco_num = E	;
+		5'd01: nco_num = D	;
+		5'd02: nco_num = C	;
+		5'd03: nco_num = D	;
+		5'd04: nco_num = E	;
+		5'd05: nco_num = E	;
+		5'd06: nco_num = E	;
+		5'd07: nco_num = D	;
+		5'd08: nco_num = D	;
+		5'd09: nco_num = D	;
+		5'd10: nco_num = E	;
+		5'd11: nco_num = E	;
+		5'd12: nco_num = E	;
+		5'd13: nco_num = E	;
+		5'd14: nco_num = D	;
+		5'd15: nco_num = C	;
+		5'd16: nco_num = D	;
+		5'd17: nco_num = E	;
+		5'd18: nco_num = E	;
+		5'd19: nco_num = E	;
+		5'd20: nco_num = D	;
+		5'd21: nco_num = D	;
+		5'd22: nco_num = E	;
+		5'd23: nco_num = D	;
+		5'd24: nco_num = C	;
+	endcase
+end
+
+wire		buzz		;
+nco	u_nco_buzz(	
+		.o_gen_clk	( buzz		),
+		.i_nco_num	( nco_num	),
+		.clk		( clk		),
+		.rst_n		( rst_n		));
+
+assign		o_buzz = buzz & i_buzz_en;
+
+endmodule
+
+module	top(
+    o_seg_enb,
 		o_seg_dp,
 		o_seg,
+		o_alarm,
 		i_sw0,
 		i_sw1,
 		i_sw2,
+		i_sw3,
 		clk,
 		rst_n);
+		
+    
 
 output	[5:0]	o_seg_enb	;
 output		o_seg_dp	;
 output	[6:0]	o_seg		;
+output		o_alarm		;
 
 input		i_sw0		;
 input		i_sw1		;
 input		i_sw2		;
-input		clk		;
-input		rst_n	        ;
+input		i_sw3		;
+input		clk		  ;
+input		rst_n		;
 
-wire  	        max_hit_min     ;
+wire 		max_hit_min     ;
 wire		max_hit_sec     ;
-wire		max_hit_hou	;
+wire  	max_hit_hou     ;
+wire  	hou_clk         ;
 wire		min_clk         ;
 wire		sec_clk         ;
-wire		hou_clk		;
+wire  	position        ;
+wire  	alarm_en        ;
+wire  	alarm_min       ;
+wire  	alarm_sec       ;
+wire  	alarm_hou       ;
 
-
+wire  [1:0]mode       ;
 controller u_ctrl (
-			.o_mode(),
-			.o_position(),
+			.o_mode(mode),
+			.o_position(position),
+			.o_alarm_en(alarm_en),
 			.o_sec_clk(sec_clk),
 			.o_min_clk(min_clk),
 			.o_hou_clk(hou_clk),
+			.o_alarm_sec_clk(alarm_sec),
+			.o_alarm_min_clk(alarm_min),
+			.o_alarm_hou_clk(alarm_hou),
 			.i_max_hit_sec(max_hit_sec),
 			.i_max_hit_min(max_hit_min),
 			.i_max_hit_hou(max_hit_hou),
 			.i_sw0(i_sw0),
 			.i_sw1(i_sw1),
 			.i_sw2(i_sw2),
+			.i_sw3(i_sw3),
 			.clk(clk),
-			.rst_n(rst_n));
+			.rst_n(rst_n));		
+			
 
 wire    [5:0]   min            ;
 wire    [5:0]   sec            ;
-wire	[5:0]	hou	       ;
+wire    [5:0]   hou            ;
 
 
-
+wire    buzz                    ;
+  
 houminsec u_houminsec (
 			.o_sec(sec),
 			.o_min(min),
@@ -473,16 +754,30 @@ houminsec u_houminsec (
 			.o_max_hit_sec(max_hit_sec),
 			.o_max_hit_min(max_hit_min),
 			.o_max_hit_hou(max_hit_hou),
+			.o_alarm(buzz),
+			.i_mode(mode),
+			.i_position(position),
 			.i_sec_clk(sec_clk),
 			.i_min_clk(min_clk),
 			.i_hou_clk(hou_clk),
+			.i_alarm_sec_clk(alarm_sec),
+			.i_alarm_min_clk(alarm_min),
+			.i_alarm_hou_clk(alarm_hou),
+			.i_alarm_en(alarm_en),
 			.clk(clk),
 			.rst_n(rst_n));
+
+buzz   u_buzz(
+		  .o_buzz(o_alarm),
+		  .i_buzz_en(buzz),
+		  .clk(clk),
+		  .rst_n(rst_n));
 
 wire    [3:0]   sec_left_num   ;
 wire    [3:0]   sec_right_num  ;
 wire    [6:0]   sec_left       ;
 wire    [6:0]   sec_right      ;
+
 double_fig_sep u0_dfs(
 			.o_left(sec_left_num),
 			.o_right(sec_right_num),
@@ -515,7 +810,6 @@ fnd_dec u3_fnd_dec(
 			.o_seg(min_right),
 			.i_num(min_right_num));
 
-
 wire    [3:0]   hou_left_num   ;
 wire    [3:0]   hou_right_num  ;
 wire    [6:0]   hou_left       ;
@@ -533,8 +827,7 @@ fnd_dec u4_fnd_dec(
 fnd_dec u5_fnd_dec(
 			.o_seg(hou_right),
 			.i_num(hou_right_num));
-
-
+			
 wire [41:0] six_digit_seg;
 assign six_digit_seg = {hou_left,hou_right,min_left,min_right,sec_left,sec_right};
 
@@ -543,9 +836,16 @@ led_disp u_led_disp (
 			.o_seg_dp(o_seg_dp),
 			.o_seg_enb(o_seg_enb),
 			.i_six_digit_seg(six_digit_seg),
-			.i_six_dp(6'd0),
+			.i_six_dp(mode),
 			.clk(clk),
 			.rst_n(rst_n));
 
 endmodule
+
+
+
+
+
+
+
 
