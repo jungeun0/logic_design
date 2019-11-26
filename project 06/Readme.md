@@ -17,7 +17,8 @@
 ### FPGA 실습  : 리모콘의 버튼을 눌러 각각 다른  display가 나오도록 설계
 **Top Module 의 DUT/TestBench Code 및 Waveform 검증**
 ###**WAVEFORM 동작 사진**
-![]()
+![](https://github.com/jungeun0/logic_design/blob/master/IMG_2545%20(1).jpg)
+
 ### **FPGA 동작 사진**
 ![](https://github.com/jungeun0/logic_design/blob/master/IMG_2548%20(1).PNG)
 
@@ -27,7 +28,7 @@
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDAxNzIxMTgxLC0xMTg2OTgzNTkzLC04Mj
-AyMDA1MzYsLTIwMjIyMDYzNzEsODMzMTIxNjY3LC04NzUzNjYw
-OF19
+eyJoaXN0b3J5IjpbMTQ4NDA5ODkyNywtMTE4Njk4MzU5MywtOD
+IwMjAwNTM2LC0yMDIyMjA2MzcxLDgzMzEyMTY2NywtODc1MzY2
+MDhdfQ==
 -->
