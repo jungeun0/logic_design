@@ -3,7 +3,7 @@
 ### **적외선 컨트롤러 리모콘을 통한  display 조종**
 #### **Module nco** :  clock 을 만드는 모듈. 
 #### **Fnd_dec** : 7- segment의 모양을 만드는 모듈. 
-0,
+0,1,2,3,4,5,6,7,8,9
 #### **Double_fig_sep** : 
 #### **Led_disp** : 
 #### **Ir_rx**:
@@ -20,6 +20,6 @@
 
 ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q3.jpgcommit/00f628e9730e4566201f842117c394973bc47b59)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwNjYwODk1MzcsODMzMTIxNjY3LC04Nz
+eyJoaXN0b3J5IjpbLTE4MjI0NDMxMzQsODMzMTIxNjY3LC04Nz
 UzNjYwOF19
 -->
