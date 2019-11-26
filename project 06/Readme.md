@@ -15,15 +15,16 @@
   wire [41:0] six_digit_seg; assign six_digit_seg = { 4{7'b1110111}, seg_left, seg_right } 
   ``` 
   >  Q2 - 고정 LED 없이 2개의 LED 단위로 1초 Counter 값 표시 : 
- 
- `00_00_00`, `01_01_01`, `02_02_02`, … 순으로 LED 변경 ```verilog wire [41:0] six_digit_seg; assign six_digit_seg = { 3{seg_left, seg_right} } 
+  `00_00_00`, `01_01_01`, `02_02_02`, … 순으로 LED 변경 
+  ```verilog 
+  wire [41:0] six_digit_seg; assign six_digit_seg = { 3{seg_left, seg_right} } 
  ```
 
    ## 결과 
    ### **Top Module 의 DUT/TestBench Code 및 Waveform 검증** 
    ### **FPGA 동작 사진 (3개- 일반, Q1, Q2)** ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/12312321213213.PNG) ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/result.jpg) ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q2.jpg) ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q3.jpg)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzQxOTY0OTk1LDExODk3NjcxMjEsLTExOD
+eyJoaXN0b3J5IjpbMzQzMzUxODI5LDExODk3NjcxMjEsLTExOD
 Y5ODM1OTMsLTgyMDIwMDUzNiwtMjAyMjIwNjM3MSw4MzMxMjE2
 NjcsLTg3NTM2NjA4XX0=
 -->
