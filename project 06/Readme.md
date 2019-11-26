@@ -34,4 +34,7 @@ assign       six_digit_seg = { 3{seg_left, seg_right} }
 
 ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q2.jpg)
 
-![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q3.jpg)
+![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q3.jpgcommit/00f628e9730e4566201f842117c394973bc47b59)
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTMzMjk2MzUxM119
+-->
