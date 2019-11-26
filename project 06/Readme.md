@@ -16,12 +16,18 @@
 #### **Top Module** : 시계를 만들 때 이용했던   top module 를 이용하여 7-segment를 보여주고, 리모콘의 시그널에 따라 segment가 바뀌도록 Display Module 설계
 ### FPGA 실습  : 리모콘의 버튼을 눌러 각각 다른  display가 나오도록 설계
 **Top Module 의 DUT/TestBench Code 및 Waveform 검증**
+###**WAVEFORM 동작 사진**
+![]()
 ### **FPGA 동작 사진**
+![](https://github.com/jungeun0/logic_design/blob/master/IMG_2548%20(1).PNG)
 
-![](https://github.com/jungeun0/logic_design/blob/master/project%2006/12312321213213.PNG)
+
+
+
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExODY5ODM1OTMsLTgyMDIwMDUzNiwtMj
-AyMjIwNjM3MSw4MzMxMjE2NjcsLTg3NTM2NjA4XX0=
+eyJoaXN0b3J5IjpbNDAxNzIxMTgxLC0xMTg2OTgzNTkzLC04Mj
+AyMDA1MzYsLTIwMjIyMDYzNzEsODMzMTIxNjY3LC04NzUzNjYw
+OF19
 -->
