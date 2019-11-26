@@ -1,8 +1,9 @@
 # Lab 10
 ## 실습 내용
 ### **적외선 컨트롤러 리모콘을 통한  display 조종**
-#### **Module nco** :  
-#### **Fnd_dec** : 
+#### **Module nco** :  clock 을 만드는 모듈. 
+#### **Fnd_dec** : 7- segment의 모양을 만드는 모듈. 
+0,
 #### **Double_fig_sep** : 
 #### **Led_disp** : 
 #### **Ir_rx**:
@@ -19,6 +20,6 @@
 
 ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q3.jpgcommit/00f628e9730e4566201f842117c394973bc47b59)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIyNjAyODIwMyw4MzMxMjE2NjcsLTg3NT
-M2NjA4XX0=
+eyJoaXN0b3J5IjpbLTEwNjYwODk1MzcsODMzMTIxNjY3LC04Nz
+UzNjYwOF19
 -->
