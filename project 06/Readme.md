@@ -1,25 +1,16 @@
-# Lab 10
-## 실습 내용
-### **적외선 컨트롤러 리모콘을 통한  display 조종**
-#### **Module nco** :  clock 을 만드는 모듈. 
-#### **Fnd_dec** : 7- segment의 모양을 만드는 모듈. 
-0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F 총 16개의 문자를 표현할 수 있음.
-#### **Led_disp** : DISPLAY를 담당하는 모듈. 동시에 6개의 7-segment가 보일 수 있도록 설계.  
-#### **Ir_rx**: 리모콘의 신호에 따라   state를 변경하는 모듈. 
-#### **Top Module** : 시계를 만들 때 이용했던   top module 를 이용하여 7-segment를 ㅂㅇ실습 장비의 LED에 맞는 Display Module 설계
-### FPGA 실습  : 리모콘의 버튼을 눌러 각각 다른  display가 나오도록 설계
-**Top Module 의 DUT/TestBench Code 및 Waveform 검증**
-### **FPGA 동작 사진 (3개- 일반, Q1, Q2)**
-
-![](https://github.com/jungeun0/logic_design/blob/master/project%2006/12312321213213.PNG)
-
-![](https://github.com/jungeun0/logic_design/blob/master/project%2006/result.jpg)
-
-![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q2.jpg)
-
-![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q3.jpgcommit/00f628e9730e4566201f842117c394973bc47b59)
+# Lab 06 
+## 실습 내용 
+### **7 – Segment Display Decoder (개별)** 
+#### **Submodule 1** : 0~9의 값을 갖는 4bit 입력 신호를 받아 7bit FND segment 값 출력 #### **Submodule 2** : 0~59의 값을 갖는 6bit 입력 신호를 받아 십의 자리 수와 일의 자리 수를 각각 4bit으로 출력
+ #### **Top Module** : 저번 시간에 만든 second counter 및 Submodule 1/2를 이용하여 실습 장비의 LED에 맞는 Display Module 설계 
+ ### FPGA 실습 (팀) : 6개의 LED 중 가장 오른쪽 2개의 LED에 1초간격으로 0~59까지 증가하는 Counter 값 Display : NCO(Numerical Controlled Oscillator) 입력 바꿔서 4초 간격으로 증가하는 코드 테스트 
+ ## 퀴즈 
+ ### 아래 코드 일부를 수정하여 다음을 구하시오
+  ```verilog wire [41:0] six_digit_seg; assign six_digit_seg = { 4{7'b0000000}, seg_left, seg_right } ``` 
+  > Q1 - 고정 LED (왼쪽 4개) AAAA 출력 : `AA_AA_00`, `AA_AA_01`, `AA_AA_02`, … 순으로 LED 변경 ```verilog wire [41:0] six_digit_seg; assign six_digit_seg = { 4{7'b1110111}, seg_left, seg_right } ``` 
+  > > Q2 - 고정 LED 없이 2개의 LED 단위로 1초 Counter 값 표시 : `00_00_00`, `01_01_01`, `02_02_02`, … 순으로 LED 변경 ```verilog wire [41:0] six_digit_seg; assign six_digit_seg = { 3{seg_left, seg_right} } ``` ## 결과 ### **Top Module 의 DUT/TestBench Code 및 Waveform 검증** ### **FPGA 동작 사진 (3개- 일반, Q1, Q2)** ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/12312321213213.PNG) ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/result.jpg) ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q2.jpg) ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q3.jpg)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTE4OTc2NzEyMSwtMTE4Njk4MzU5MywtOD
-IwMjAwNTM2LC0yMDIyMjA2MzcxLDgzMzEyMTY2NywtODc1MzY2
-MDhdfQ==
+eyJoaXN0b3J5IjpbLTEzMTQxMDQ5MDEsMTE4OTc2NzEyMSwtMT
+E4Njk4MzU5MywtODIwMjAwNTM2LC0yMDIyMjA2MzcxLDgzMzEy
+MTY2NywtODc1MzY2MDhdfQ==
 -->
