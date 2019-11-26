@@ -4,10 +4,10 @@
 #### **Module nco** :   
 #### **Fnd_dec** : 
 #### **Double_fig_sep** : 
+#### **Led_disp** : 
+#### **Ir_rx**:
 #### **Top Module** : 저번 시간에 만든 second counter  및 Submodule 1/2를 이용하여 실습 장비의 LED에 맞는 Display Module 설계
-### FPGA 실습 (팀) : 6개의 LED 중 가장 오른쪽 2개의 LED에 1초간격으로 0~59까지 증가하는 Counter 값 Display
-: NCO(Numerical Controlled Oscillator) 입력 바꿔서 4초 간격으로 증가하는 코드 테스트
-
+### FPGA 실습  : 리모콘의 버튼을 눌러 각각 다른  display가 나오도록 설
 ## 퀴즈 
 ### 아래 코드 일부를 수정하여 다음을 구하시오 
 ```verilog 
@@ -37,5 +37,5 @@ assign       six_digit_seg = { 3{seg_left, seg_right} }
 
 ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q3.jpgcommit/00f628e9730e4566201f842117c394973bc47b59)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTg3NTM2NjA4XX0=
+eyJoaXN0b3J5IjpbODMzMTIxNjY3LC04NzUzNjYwOF19
 -->
