@@ -3,9 +3,8 @@
 ### **적외선 컨트롤러 리모콘을 통한  display 조종**
 #### **Module nco** :  clock 을 만드는 모듈. 
 #### **Fnd_dec** : 7- segment의 모양을 만드는 모듈. 
-0,1,2,3,4,5,6,7,8,9
-#### **Double_fig_sep** : 
-#### **Led_disp** : 
+0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F 총 16개의 문자를 표현할 수 있음.
+#### **Led_disp** : ㅇ
 #### **Ir_rx**:
 #### **Top Module** : 저번 시간에 만든 second counter  및 Submodule 1/2를 이용하여 실습 장비의 LED에 맞는 Display Module 설계
 ### FPGA 실습  : 리모콘의 버튼을 눌러 각각 다른  display가 나오도록 설계
@@ -20,6 +19,6 @@
 
 ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q3.jpgcommit/00f628e9730e4566201f842117c394973bc47b59)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4MjI0NDMxMzQsODMzMTIxNjY3LC04Nz
-UzNjYwOF19
+eyJoaXN0b3J5IjpbNzkzNzMwMjYzLDgzMzEyMTY2NywtODc1Mz
+Y2MDhdfQ==
 -->
