@@ -6,11 +6,21 @@
  ### FPGA 실습 (팀) : 6개의 LED 중 가장 오른쪽 2개의 LED에 1초간격으로 0~59까지 증가하는 Counter 값 Display : NCO(Numerical Controlled Oscillator) 입력 바꿔서 4초 간격으로 증가하는 코드 테스트 
  ## 퀴즈 
  ### 아래 코드 일부를 수정하여 다음을 구하시오
-  ```verilog wire [41:0] six_digit_seg; assign six_digit_seg = { 4{7'b0000000}, seg_left, seg_right } ``` 
-  > Q1 - 고정 LED (왼쪽 4개) AAAA 출력 : `AA_AA_00`, `AA_AA_01`, `AA_AA_02`, … 순으로 LED 변경 ```verilog wire [41:0] six_digit_seg; assign six_digit_seg = { 4{7'b1110111}, seg_left, seg_right } ``` 
-  > > Q2 - 고정 LED 없이 2개의 LED 단위로 1초 Counter 값 표시 : `00_00_00`, `01_01_01`, `02_02_02`, … 순으로 LED 변경 ```verilog wire [41:0] six_digit_seg; assign six_digit_seg = { 3{seg_left, seg_right} } ``` ## 결과 ### **Top Module 의 DUT/TestBench Code 및 Waveform 검증** ### **FPGA 동작 사진 (3개- 일반, Q1, Q2)** ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/12312321213213.PNG) ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/result.jpg) ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q2.jpg) ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q3.jpg)
+  ```verilog 
+  wire [41:0] six_digit_seg; assign six_digit_seg = { 4{7'b0000000}, seg_left, seg_right } ``` 
+  > Q1 - 고정 LED (왼쪽 4개) AAAA 출력 : 
+  > ```verilog
+  > `AA_AA_00`, `AA_AA_01`, `AA_AA_02`, … 순으로 LED 변경 ```verilog wire [41:0] six_digit_seg; assign six_digit_seg = { 4{7'b1110111}, seg_left, seg_right } ``` 
+  > > Q2 - 고정 LED 없이 2개의 LED 단위로 1초 Counter 값 표시 : 
+  > ```verilog
+  > `00_00_00`, `01_01_01`, `02_02_02`, … 순으로 LED 변경 ```verilog wire [41:0] six_digit_seg; assign six_digit_seg = { 3{seg_left, seg_right} } 
+ ```
+
+   ## 결과 
+   ### **Top Module 의 DUT/TestBench Code 및 Waveform 검증** 
+   ### **FPGA 동작 사진 (3개- 일반, Q1, Q2)** ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/12312321213213.PNG) ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/result.jpg) ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q2.jpg) ![](https://github.com/jungeun0/logic_design/blob/master/project%2006/q3.jpg)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzMTQxMDQ5MDEsMTE4OTc2NzEyMSwtMT
-E4Njk4MzU5MywtODIwMjAwNTM2LC0yMDIyMjA2MzcxLDgzMzEy
-MTY2NywtODc1MzY2MDhdfQ==
+eyJoaXN0b3J5IjpbMjE2MTE3Mjg1LDExODk3NjcxMjEsLTExOD
+Y5ODM1OTMsLTgyMDIwMDUzNiwtMjAyMjIwNjM3MSw4MzMxMjE2
+NjcsLTg3NTM2NjA4XX0=
 -->
