@@ -99,7 +99,7 @@ assign		o_right	= i_double_fig % 10	;
 endmodule
 
 //	--------------------------------------------------
-//	0~59 --> 2 Separated Segments
+//	accept i_six_digit_seg,mode,position,alarm value --> make o_seg,o_seg_dp,o_seg_enb
 //	--------------------------------------------------
 module	led_disp(
 		o_seg,
@@ -164,6 +164,7 @@ reg count1;
 reg count2;
 reg count3;
 
+reg [41:0] six_digit_seg;
 
 		
 always @(posedge clk_2 or negedge rst_n) begin
@@ -178,80 +179,42 @@ always @(posedge clk_2 or negedge rst_n) begin
   end
 end
 
-always @(cnt_common_node,i_mode,i_position,count1,count2,count3) begin
+
+always @(i_mode,i_position,count1,count2,count3) begin
   if((i_mode == 2'b01) || (i_mode == 2'b10))begin
     case ( i_position  )
       2'b00 : begin
         if( count1 == 1'b0 ) begin
-            case (cnt_common_node)
-		          4'd0:	o_seg_enb = 6'b111111;
-		          4'd1:	o_seg_enb = 6'b111111;
-		          4'd2:	o_seg_enb = 6'b111011;
-		          4'd3:	o_seg_enb = 6'b110111;
-		          4'd4:	o_seg_enb = 6'b101111;
-		          4'd5:	o_seg_enb = 6'b011111;
-		          default:o_seg_enb = 6'b111111;	
-	           endcase
+            six_digit_seg [13:0] = 14'd0;
+            six_digit_seg [41:14] = i_six_digit_seg [41:14];
 	        end else begin
-	           case (cnt_common_node)
-		          4'd0:	o_seg_enb = 6'b111110;
-		          4'd1:	o_seg_enb = 6'b111101;
-		          4'd2:	o_seg_enb = 6'b111011;
-		          4'd3:	o_seg_enb = 6'b110111;
-		          4'd4:	o_seg_enb = 6'b101111;
-		          4'd5:	o_seg_enb = 6'b011111;
-		          default:o_seg_enb = 6'b111111;	
-	          endcase
+	           six_digit_seg = i_six_digit_seg  ;
 	       end
 	   end
 	   2'b01 : begin
 	       if( count2 == 1'b0) begin
-              case (cnt_common_node)
-		          4'd0:	o_seg_enb = 6'b111110;
-		          4'd1:	o_seg_enb = 6'b111101;
-		          4'd2:	o_seg_enb = 6'b111111;
-		          4'd3:	o_seg_enb = 6'b111111;
-		          4'd4:	o_seg_enb = 6'b101111;
-		          4'd5:	o_seg_enb = 6'b011111;
-		          default:o_seg_enb = 6'b111111;	
-	            endcase
+              six_digit_seg [13:0]  = i_six_digit_seg [13:0];
+		          six_digit_seg [27:14] = 14'd0;
+		          six_digit_seg [41:27] = i_six_digit_seg [41:27];	
 	       end else begin
-	          case (cnt_common_node)
-		          4'd0:	o_seg_enb = 6'b111110;
-		          4'd1:	o_seg_enb = 6'b111101;
-		          4'd2:	o_seg_enb = 6'b111011;
-		          4'd3:	o_seg_enb = 6'b110111;
-		          4'd4:	o_seg_enb = 6'b101111;
-		          4'd5:	o_seg_enb = 6'b011111;
-		          default:o_seg_enb = 6'b111111;	
-	            endcase
+	            six_digit_seg = i_six_digit_seg  ;
 	      end
 	  end
 	  2'b10 : begin
 	      if(count3 == 1'b0) begin
-              case (cnt_common_node)
-		          4'd0:	o_seg_enb = 6'b111110;
-		          4'd1:	o_seg_enb = 6'b111101;
-		          4'd2:	o_seg_enb = 6'b111011;
-		          4'd3:	o_seg_enb = 6'b110111;
-		          4'd4:	o_seg_enb = 6'b111111;
-		          4'd5:	o_seg_enb = 6'b111111;
-		          default:o_seg_enb = 6'b111111;	
-	            endcase
+              six_digit_seg [27:0]  = i_six_digit_seg [27:0];
+		          six_digit_seg [41:28] = 14'd0;
 	        end else begin
-	          case (cnt_common_node)
-		          4'd0:	o_seg_enb = 6'b111110;
-		          4'd1:	o_seg_enb = 6'b111101;
-		          4'd2:	o_seg_enb = 6'b111011;
-		          4'd3:	o_seg_enb = 6'b110111;
-		          4'd4:	o_seg_enb = 6'b101111;
-		          4'd5:	o_seg_enb = 6'b011111;
-		          default:o_seg_enb = 6'b111111;	
-	            endcase
+	          six_digit_seg = i_six_digit_seg  ;
 	        end
 	  end 
 	 endcase
-	end else begin   
+	end else begin
+	 six_digit_seg = i_six_digit_seg;
+	end 
+end
+
+always @(cnt_common_node) begin   
 	   case (cnt_common_node)
 		    4'd0:	o_seg_enb = 6'b111110;
 		    4'd1:	o_seg_enb = 6'b111101;
@@ -261,7 +224,6 @@ always @(cnt_common_node,i_mode,i_position,count1,count2,count3) begin
 		    4'd5:	o_seg_enb = 6'b011111;
 		    default:o_seg_enb = 6'b111111;	
 	  endcase
- end
 end
 
 
@@ -287,6 +249,7 @@ always @(posedge clk_1hz or negedge rst_n) begin
     find_alarm = {find_alarm_x[0],i_alarm_en};
   end
 end
+
 always @(i_mode,i_position, find_alarm) begin
 	    if ( i_mode == 2'b01 ) begin
 	       case (i_position)
@@ -315,9 +278,6 @@ always @(i_mode,i_position, find_alarm) begin
 end
 
 
- //if i_alarm_en ==1 and find_alarm == 0, i_six_dp = 111111 and find_alarm is increasement.... so, find_alarm == 0 > find_alarm ==>1
-		      // if i_alarm_en ==1 but find_alarm ==1, i_six_dp is not changed. 
-
 
 always @(cnt_common_node) begin
 		case (cnt_common_node)
@@ -331,20 +291,18 @@ always @(cnt_common_node) begin
 		endcase
 end
 
-
-
 //i_mode = 1, find_alarm = 1 or i_mode = 0
 
 reg	[6:0]	o_seg			            ;
 
 always @(cnt_common_node) begin
 	case (cnt_common_node)
-		4'd0:	o_seg = i_six_digit_seg[6:0];
-		4'd1:	o_seg = i_six_digit_seg[13:7];
-		4'd2:	o_seg = i_six_digit_seg[20:14];
-		4'd3:	o_seg = i_six_digit_seg[27:21];
-		4'd4:	o_seg = i_six_digit_seg[34:28];
-		4'd5:	o_seg = i_six_digit_seg[41:35];
+		4'd0:	o_seg = six_digit_seg[6:0];
+		4'd1:	o_seg = six_digit_seg[13:7];
+		4'd2:	o_seg = six_digit_seg[20:14];
+		4'd3:	o_seg = six_digit_seg[27:21];
+		4'd4:	o_seg = six_digit_seg[34:28];
+		4'd5:	o_seg = six_digit_seg[41:35];
 		default:o_seg = 7'b111_1110; // 0 display
 	endcase
 end
@@ -1091,6 +1049,7 @@ led_disp u_led_disp (
 endmodule
 
   
+
 
 
 
