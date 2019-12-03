@@ -98,6 +98,171 @@ assign		o_right	= i_double_fig % 10	;
 
 endmodule
 
+
+
+
+//	--------------------------------------------------
+//	blink (Add blink : six_digit_seg blink & dp blink
+//	--------------------------------------------------
+module blink (  
+               i_mode,
+               i_position,
+               i_six_digit_seg,
+               o_six_digit_seg,
+               clk,
+               rst_n,
+               o_six_dp,
+               
+              	i_alarm_en );
+              	
+              	
+input	[1:0]	 i_position		     ;
+input	[1:0]	 i_mode			        ;
+	
+input	[41:0]	i_six_digit_seg		;       
+input		      clk			           ;
+input		      rst_n			         ;
+input        i_alarm_en       ;
+
+output [41:0]	o_six_digit_seg	;
+output [5:0]  o_six_dp        ;
+
+  
+
+wire		gen_clk			;	
+
+nco		u_nco(
+		.o_gen_clk	( gen_clk	),
+		.i_nco_num	( 32'd5000	),
+		.clk		( clk		),
+		.rst_n		( rst_n		));
+
+
+
+wire		clk_1hz			;
+nco		u1_nco(
+		.o_gen_clk	( clk_1hz	),
+		.i_nco_num	( 32'd50000000	),
+		.clk		( clk		),
+		.rst_n		( rst_n		));
+
+wire clk_2  ;
+nco		u2_nco(
+		.o_gen_clk	( clk_2	),
+		.i_nco_num	( 32'd5000000	),
+		.clk		( clk		),
+		.rst_n		( rst_n		));		
+		
+reg	[5:0]	o_seg_enb		 ;
+reg       count1      ;   
+reg       count2      ;
+reg       count3      ;
+
+reg [41:0] six_digit_seg;
+
+		
+always @(posedge clk_2 or negedge rst_n) begin
+  if(rst_n == 1'b0) begin
+    count1 = 1'b0;
+    count2 = 1'b0;
+    count3 = 1'b0;
+  end else begin
+    count1 <= count1 + 1'b1;
+    count2 <= count2 + 1'b1;
+    count3 <= count3 + 1'b1;
+  end
+end
+
+
+reg [41:0] o_six_digit_seg;
+
+
+always @(i_mode,i_position,count1,count2,count3) begin
+  if((i_mode == 2'b01) || (i_mode == 2'b10))begin
+    case ( i_position  )
+     2'b00 : begin
+        if( count1 == 1'b0 ) begin
+          o_six_digit_seg [13:0] = 14'd0                    ;
+          o_six_digit_seg [41:14] = i_six_digit_seg [41:14] ;
+	      end else begin
+	        o_six_digit_seg = i_six_digit_seg                 ;
+	      end
+	   end
+	   2'b01 : begin
+	      if( count2 == 1'b0) begin
+          o_six_digit_seg [13:0]  = i_six_digit_seg [13:0]  ;
+		      o_six_digit_seg [27:14] = 14'd0                   ;
+		      o_six_digit_seg [41:28] = i_six_digit_seg [41:28] ;	
+	      end else begin
+	        o_six_digit_seg = i_six_digit_seg                 ;
+	      end
+	   end
+	   2'b10 : begin
+	      if(count3 == 1'b0) begin
+          o_six_digit_seg [27:0]  = i_six_digit_seg [27:0]  ;
+		      o_six_digit_seg [41:28] = 14'd0                   ;
+	      end else begin
+	        o_six_digit_seg = i_six_digit_seg                 ;
+	      end
+	   end 
+	 endcase
+	end else begin
+	 o_six_digit_seg = i_six_digit_seg                        ;
+	end 
+end
+
+     
+reg  [1:0] find_alarm = 2'b00        ;
+reg  [1:0] find_alarm_x = 2'b00      ;
+
+
+always @(posedge clk) begin
+  find_alarm_x = find_alarm ;
+end
+
+		
+always @(posedge clk_1hz or negedge rst_n) begin
+  if(rst_n == 1'b0) begin
+    find_alarm = 2'b00;
+  end else begin
+    find_alarm = {find_alarm_x[0],i_alarm_en};
+  end
+end
+
+
+reg 	[5:0]	o_six_dp		;	  
+
+
+always @(i_mode,i_position, find_alarm) begin
+	    if ( i_mode == 2'b01 ) begin
+	       case (i_position)
+		      2'b00:	  o_six_dp = 6'b000001;
+		      2'b01:	  o_six_dp = 6'b000100;
+		      2'b10:	  o_six_dp = 6'b010000;
+		      default: o_six_dp = 6'b000000;
+		     endcase
+	    end else begin
+	         if ( i_mode == 2'b10 ) begin
+	           case (i_position)
+		          2'b00:	  o_six_dp = 6'b000010;
+		          2'b01:	  o_six_dp = 6'b001000;
+		          2'b10:	  o_six_dp = 6'b100000;
+		          default: o_six_dp = 6'b000000;
+		         endcase
+		       end else begin
+		            o_six_dp = 6'b000000;
+		       end
+		     //i_mode is not 2'b10 and 2'b01, i_six_dp have to be 6'b000000
+           if( (find_alarm == 2'b01)||(find_alarm == 2'b10) ) begin
+              o_six_dp = 6'b111111;        
+           end 
+	    end 	  
+end
+
+
+
+endmodule
+
 //	--------------------------------------------------
 //	accept i_six_digit_seg,mode,position,alarm value --> make o_seg,o_seg_dp,o_seg_enb
 //	--------------------------------------------------
@@ -106,24 +271,21 @@ module	led_disp(
 		o_seg_dp,
 		o_seg_enb,
 		i_six_digit_seg,
+		i_six_dp,
 		clk,
-		i_mode,
-		i_position,
-		rst_n,
-		i_alarm_en );    //add i_mode & i_position --> to make new i_six_dp
+		rst_n);    //add i_mode & i_position --> to make new i_six_dp
   
-output	[5:0]	o_seg_enb		;
-output		     o_seg_dp		 ;
-output	[6:0]	o_seg		    ;
+output	[5:0]	o_seg_enb		      ;
+output		     o_seg_dp		       ;
+output	[6:0]	o_seg		          ;
 	
 input	[41:0]	i_six_digit_seg		;
-input	[1:0]	 i_position		     ;
-input	[1:0]	 i_mode			        ;
+input [5:0]  i_six_dp         ;
 input		clk			                 ;
 input		rst_n			               ;
-input  i_alarm_en             ;
 
-wire		gen_clk			;	
+wire		gen_clk			              ;	
+
 nco		u_nco(
 		.o_gen_clk	( gen_clk	),
 		.i_nco_num	( 32'd5000	),
@@ -145,138 +307,25 @@ always @(posedge gen_clk or negedge rst_n) begin
 	end
 end
 
-wire		clk_1hz			;
-nco		u1_nco(
-		.o_gen_clk	( clk_1hz	),
-		.i_nco_num	( 32'd50000000	),
-		.clk		( clk		),
-		.rst_n		( rst_n		));
+reg [5:0] o_seg_enb;
 
-wire clk_2  ;
-nco		u2_nco(
-		.o_gen_clk	( clk_2	),
-		.i_nco_num	( 32'd5000000	),
-		.clk		( clk		),
-		.rst_n		( rst_n		));		
-		
-reg	[5:0]	o_seg_enb		;
-reg count1;
-reg count2;
-reg count3;
-
-reg [41:0] six_digit_seg;
-
-		
-always @(posedge clk_2 or negedge rst_n) begin
-  if(rst_n == 1'b0) begin
-    count1 = 1'b0;
-    count2 = 1'b0;
-    count3 = 1'b0;
-  end else begin
-    count1 <= count1 + 1'b1;
-    count2 <= count2 + 1'b1;
-    count3 <= count3 + 1'b1;
-  end
-end
-
-
-always @(i_mode,i_position,count1,count2,count3) begin
-  if((i_mode == 2'b01) || (i_mode == 2'b10))begin
-    case ( i_position  )
-      2'b00 : begin
-        if( count1 == 1'b0 ) begin
-            six_digit_seg [13:0] = 14'd0;
-            six_digit_seg [41:14] = i_six_digit_seg [41:14];
-	        end else begin
-	           six_digit_seg = i_six_digit_seg  ;
-	       end
-	   end
-	   2'b01 : begin
-	       if( count2 == 1'b0) begin
-              six_digit_seg [13:0]  = i_six_digit_seg [13:0];
-		          six_digit_seg [27:14] = 14'd0;
-		          six_digit_seg [41:27] = i_six_digit_seg [41:27];	
-	       end else begin
-	            six_digit_seg = i_six_digit_seg  ;
-	      end
-	  end
-	  2'b10 : begin
-	      if(count3 == 1'b0) begin
-              six_digit_seg [27:0]  = i_six_digit_seg [27:0];
-		          six_digit_seg [41:28] = 14'd0;
-	        end else begin
-	          six_digit_seg = i_six_digit_seg  ;
-	        end
-	  end 
-	 endcase
-	end else begin
-	 six_digit_seg = i_six_digit_seg;
-	end 
-end
 
 always @(cnt_common_node) begin   
 	   case (cnt_common_node)
-		    4'd0:	o_seg_enb = 6'b111110;
-		    4'd1:	o_seg_enb = 6'b111101;
-		    4'd2:	o_seg_enb = 6'b111011;
-		    4'd3:	o_seg_enb = 6'b110111;
-		    4'd4:	o_seg_enb = 6'b101111;
-		    4'd5:	o_seg_enb = 6'b011111;
-		    default:o_seg_enb = 6'b111111;	
+		    4'd0:	o_seg_enb = 6'b111110   ;
+		    4'd1:	o_seg_enb = 6'b111101   ;
+		    4'd2:	o_seg_enb = 6'b111011   ;
+		    4'd3:	o_seg_enb = 6'b110111   ;
+		    4'd4:	o_seg_enb = 6'b101111   ;
+		    4'd5:	o_seg_enb = 6'b011111   ;
+		    default:o_seg_enb = 6'b111111 ;	
 	  endcase
 end
 
-
-reg 	[5:0]	i_six_dp		;	  
 reg			     o_seg_dp		; //add
 
 
 //ADD CONDITION : decide i_six_dp when i_mode is 2'b01 and 2'b10 
-     
-reg  [1:0] find_alarm = 2'b00;
-reg  [1:0] find_alarm_x = 2'b00;
-
-
-always @(posedge clk) begin
-  find_alarm_x = find_alarm ;
-end
-
-		
-always @(posedge clk_1hz or negedge rst_n) begin
-  if(rst_n == 1'b0) begin
-    find_alarm = 2'b00;
-  end else begin
-    find_alarm = {find_alarm_x[0],i_alarm_en};
-  end
-end
-
-always @(i_mode,i_position, find_alarm) begin
-	    if ( i_mode == 2'b01 ) begin
-	       case (i_position)
-		      2'b00:	  i_six_dp = 6'b000001;
-		      2'b01:	  i_six_dp = 6'b000100;
-		      2'b10:	  i_six_dp = 6'b010000;
-		      default: i_six_dp = 6'b000000;
-		     endcase
-	     end else begin
-	         if ( i_mode == 2'b10 ) begin
-	           case (i_position)
-		          2'b00:	  i_six_dp = 6'b000010;
-		          2'b01:	  i_six_dp = 6'b001000;
-		          2'b10:	  i_six_dp = 6'b100000;
-		          default: i_six_dp = 6'b000000;
-		         endcase
-		       end else begin
-		            i_six_dp = 6'b000000;
-		       end
-		     //i_mode is not 2'b10 and 2'b01, i_six_dp have to be 6'b000000
-    if( (find_alarm == 2'b01)||(find_alarm == 2'b10) ) begin
-           i_six_dp = 6'b111111;        
-      end 
-	end 
-	  
-end
-
 
 
 always @(cnt_common_node) begin
@@ -287,7 +336,7 @@ always @(cnt_common_node) begin
 			4'd3:	o_seg_dp = i_six_dp[3];
 			4'd4:	o_seg_dp = i_six_dp[4];
 			4'd5:	o_seg_dp = i_six_dp[5];
-			default:o_seg_dp = 1'b0;
+			default:o_seg_dp = 1'b0     ;
 		endcase
 end
 
@@ -297,20 +346,17 @@ reg	[6:0]	o_seg			            ;
 
 always @(cnt_common_node) begin
 	case (cnt_common_node)
-		4'd0:	o_seg = six_digit_seg[6:0];
-		4'd1:	o_seg = six_digit_seg[13:7];
-		4'd2:	o_seg = six_digit_seg[20:14];
-		4'd3:	o_seg = six_digit_seg[27:21];
-		4'd4:	o_seg = six_digit_seg[34:28];
-		4'd5:	o_seg = six_digit_seg[41:35];
-		default:o_seg = 7'b111_1110; // 0 display
+		4'd0:	o_seg = i_six_digit_seg[6:0]  ;
+		4'd1:	o_seg = i_six_digit_seg[13:7] ;
+		4'd2:	o_seg = i_six_digit_seg[20:14];
+		4'd3:	o_seg = i_six_digit_seg[27:21];
+		4'd4:	o_seg = i_six_digit_seg[34:28];
+		4'd5:	o_seg = i_six_digit_seg[41:35];
+		default:o_seg = 7'b111_1110       ; // 0 display
 	endcase
 end
 
 endmodule
-
-
-
 
 
 
@@ -332,7 +378,7 @@ input		     clk			      ;
 input		     rst_n			    ;
 
 reg	[5:0]	o_hms_cnt		   ;
-reg		     o_max_hit		;
+reg		     o_max_hit		   ;
 
 
 
@@ -357,12 +403,12 @@ module  debounce(
 		o_sw,
 		i_sw,
 		clk);
-output		o_sw			;
+output		o_sw			 ;
 
-input		i_sw			;
-input		clk			;
+input		i_sw			  ;
+input		clk			   ;
 
-reg		dly1_sw			;
+reg		dly1_sw			 ;
 always @(posedge clk) begin
 	dly1_sw <= i_sw;
 end
@@ -372,7 +418,7 @@ always @(posedge clk) begin
 	dly2_sw <= dly1_sw;
 end
 
-assign		o_sw = dly1_sw | ~dly2_sw;
+assign		o_sw = dly1_sw | ~dly2_sw ;
 
 endmodule
 
@@ -402,20 +448,20 @@ module	controller(
 		rst_n);
 
 
-output	[1:0]	o_mode			;
-output	[1:0]	o_position		;
+output	[1:0]	o_mode			        ;
+output	[1:0]	o_position		     ;
 output [1:0] o_world_position ;
-output		o_alarm_en		;
-output		o_sec_clk		;
-output		o_min_clk		;
-output		o_hou_clk		;
-output		o_alarm_sec_clk		;
-output		o_alarm_min_clk		;
-output		o_alarm_hou_clk		;
+output		o_alarm_en		          ;
+output		o_sec_clk		           ;
+output		o_min_clk		           ;
+output		o_hou_clk		           ;
+output		o_alarm_sec_clk		     ;
+output		o_alarm_min_clk		     ;
+output		o_alarm_hou_clk	      ;
 
-input		i_max_hit_sec		;
-input		i_max_hit_min		;
-input		i_max_hit_hou		;
+input		i_max_hit_sec		        ;
+input		i_max_hit_min		        ;
+input		i_max_hit_hou		        ;
 
 input		i_sw0			;
 input		i_sw1			;
@@ -423,7 +469,7 @@ input		i_sw2			;
 input		i_sw3			;
 input  i_sw4   ;
 
-input		clk			;
+input		clk			  ;
 input		rst_n			;
 
 parameter	MODE_CLOCK	= 2'b00	;
@@ -531,9 +577,9 @@ nco		u1_nco(
 		.clk		( clk		),
 		.rst_n		( rst_n		));
 
-reg		o_sec_clk		;
-reg		o_min_clk		;
-reg  o_hou_clk  		;
+reg		o_sec_clk		      ;
+reg		o_min_clk		      ;
+reg  o_hou_clk  		    ;
 reg		o_alarm_sec_clk		;
 reg		o_alarm_min_clk		;
 reg  o_alarm_hou_clk 	;
@@ -648,27 +694,27 @@ module	houminsec(
 		clk,
 		rst_n);
 
-output	[5:0]	o_sec		;
-output	[5:0]	o_min		;
-output [5:0]	o_hou  		;
-output		o_max_hit_sec	;
-output		o_max_hit_min	;
-output  	o_max_hit_hou 	;
-output		o_alarm		;
+output	[5:0]	o_sec		    ;
+output	[5:0]	o_min		    ;
+output [5:0]	o_hou  		  ;
+output		o_max_hit_sec	  ;
+output		o_max_hit_min	  ;
+output  o_max_hit_hou 	 ;
+output		o_alarm		       ;
 
-input	[1:0]i_mode		;
-input	[1:0]i_position	;
+input	[1:0]i_mode		         ;
+input	[1:0]i_position	      ;
 input [1:0]i_world_position ;
-input			   i_sec_clk	;
-input			   i_min_clk	;
-input 	    i_hou_clk 	;
-input			   i_alarm_sec_clk	;
-input			   i_alarm_min_clk	;
-input  	   i_alarm_hou_clk ;
-input			   i_alarm_en	;
+input			   i_sec_clk	       ;
+input			   i_min_clk	       ;
+input 	    i_hou_clk 	      ;
+input			   i_alarm_sec_clk	 ;
+input			   i_alarm_min_clk	 ;
+input  	   i_alarm_hou_clk  ;
+input			   i_alarm_en	      ;
 
-input		clk		  ;
-input		rst_n		;
+input		    clk		            ;
+input		    rst_n		          ;
 
 
 parameter	MODE_CLOCK	= 2'b00	;
@@ -684,8 +730,9 @@ parameter WOR_AUS    = 2'b10 ;
 
 
 //	MODE_CLOCK
-wire	[5:0]	sec		;
-wire		max_hit_sec	;
+wire	[5:0]	 sec		       ;
+wire		      max_hit_sec	;
+
 hms_cnt		u_hms_cnt_sec(
 		.o_hms_cnt	( sec			),
 		.o_max_hit	( o_max_hit_sec		),
@@ -693,16 +740,18 @@ hms_cnt		u_hms_cnt_sec(
 		.clk		( i_sec_clk		),
 		.rst_n		( rst_n			));
 
-wire	[5:0]	min		;
-wire		max_hit_min	;
+wire	[5:0]	min		       ;
+wire		     max_hit_min	;
+
 hms_cnt		u_hms_cnt_min(
 		.o_hms_cnt	( min			),
 		.o_max_hit	( o_max_hit_min		),
 		.i_max_cnt	( 6'd59			),
 		.clk		( i_min_clk		),
 		.rst_n		( rst_n			));
-wire 	[5:0] 	hou  		;
-wire  		max_hit_hou 	;
+wire 	[5:0] 	hou  		      ;
+wire  		     max_hit_hou 	;
+
 hms_cnt		u_hms_cnt_hou(
 		.o_hms_cnt	( hou			),
 		.o_max_hit	( o_max_hit_hou		),
@@ -734,9 +783,9 @@ hms_cnt		u_hms_cnt_alarm_hou(
 		.clk		( i_alarm_hou_clk	),
 		.rst_n		( rst_n			));
 
-reg	[5:0]	o_sec		;
-reg	[5:0]	o_min		;
-reg 	[5:0] o_hou 		;
+reg	[5:0]	o_sec		   ;
+reg	[5:0]	o_min		   ;
+reg 	[5:0] o_hou 		 ;
 
 always @ (*) begin
 	case(i_mode)
@@ -891,10 +940,10 @@ module	top(
 		
     
     
-output	[5:0]	o_seg_enb	;
-output	     	o_seg_dp	;
-output	[6:0]	o_seg		  ;
-output	     	o_alarm		;
+output	[5:0]	o_seg_enb	 ;
+output	     	o_seg_dp	  ;
+output	[6:0]	o_seg		    ;
+output	     	o_alarm		  ;
 
 input		i_sw0		;
 input		i_sw1		;
@@ -917,9 +966,9 @@ wire  		alarm_sec       ;
 wire  		alarm_hou       ;
 
 
-wire  		[1:0]position   ;
-wire  		[1:0]mode       ;
-wire    [1:0]world_position;
+wire  		[1:0]position       ;
+wire  		[1:0]mode           ;
+wire    [1:0]world_position ;
 controller u_ctrl (
 			.o_mode(mode),
 			.o_position(position),
@@ -1032,17 +1081,28 @@ fnd_dec u5_fnd_dec(
 			.o_seg(hou_right),
 			.i_num(hou_right_num));
 			
-wire [41:0] six_digit_seg	;
+wire    [41:0] six_digit_seg	     ;
 assign six_digit_seg = {hou_left,hou_right,min_left,min_right,sec_left,sec_right};
+
+wire    [41:0] real_six_digit_seg ;
+wire    [5:0]  six_dp             ;    
+
+blink  u_blink(  
+      .i_mode(mode),
+      .i_position(position),
+      .i_six_digit_seg(six_digit_seg),
+      .o_six_digit_seg(real_six_digit_seg),
+      .clk(clk),
+      .rst_n(rst_n),
+      .o_six_dp(six_dp),
+     	.i_alarm_en(alarm_en) );
 
 led_disp u_led_disp (
 			.o_seg(o_seg),
 			.o_seg_dp(o_seg_dp),
 			.o_seg_enb(o_seg_enb),
-			.i_six_digit_seg(six_digit_seg),
-			.i_mode(mode),
-			.i_position(position),
-			.i_alarm_en(alarm_en),
+			.i_six_digit_seg(real_six_digit_seg),
+			.i_six_dp(six_dp),
 			.clk(clk),
 			.rst_n(rst_n));
 
