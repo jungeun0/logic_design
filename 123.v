@@ -316,7 +316,8 @@ module	hms_cntdwn(
 		i_max_cnt,
 		clk,
 		i_cntdwn_mode,
-		rst_n);
+		rst_n,
+		find_cntdwn);
 
 output	[5:0]	o_hms_cnt		;
 output		     o_min_hit		;
@@ -325,6 +326,7 @@ input	[5:0]	 i_max_cnt		   ;
 input		      clk			        ;
 input		      rst_n			      ;
 input [1:0]  i_cntdwn_mode ;
+input        find_cntdwn   ;
 
 reg	[5:0]	o_hms_cnt		   ;
 reg		     o_min_hit		   ;
@@ -333,7 +335,7 @@ reg       o_max_hit     ;
 
 
 always @(posedge clk or negedge rst_n) begin
-	if(rst_n == 1'b0) begin
+	if((rst_n == 1'b0) || (find_cntdwn == 1'b1)) begin
 		o_hms_cnt <= 6'd0;
 		o_min_hit <= 1'b0;
 	end else begin
@@ -846,10 +848,18 @@ parameter 	WOR_USA    = 2'b00 ;
 parameter 	WOR_ENG    = 2'b01 ;
 parameter 	WOR_AUS    = 2'b10 ;
 
-
 //	MODE_CLOCK
 wire	[5:0]	sec		;
 wire		max_hit_sec	;
+
+//wire  fnd_cntdwn;
+wire  find_cntdwn;
+reg  find_cntdwn_1;
+
+assign find_cntdwn = find_cntdwn_1;
+
+
+
 hms_cnt		u_hms_cnt_sec(
 		.o_hms_cnt	( sec			),
 		.o_max_hit	( o_max_hit_sec		),
@@ -905,7 +915,8 @@ hms_cntdwn u_hms_cntdwn_timer_sec(
 		.i_max_cnt(6'd59),
 		.clk(i_timer_sec_clk),
 		.i_cntdwn_mode(i_timer_en),
-		.rst_n(rst_n));
+		.rst_n(rst_n),
+		.find_cntdwn(find_cntdwn));
 		
 wire	[5:0]	timer_min	;
 hms_cntdwn u_hms_cntdwn_timer_min(
@@ -914,7 +925,8 @@ hms_cntdwn u_hms_cntdwn_timer_min(
 		.i_max_cnt(6'd59),
 		.clk(i_timer_min_clk),
 		.i_cntdwn_mode(i_timer_en),
-		.rst_n(rst_n));
+		.rst_n(rst_n),
+		.find_cntdwn(find_cntdwn));
 		
 wire	[5:0]	timer_hou	;		
 hms_cntdwn u_hms_cntdwn_timer_hou(
@@ -923,66 +935,8 @@ hms_cntdwn u_hms_cntdwn_timer_hou(
 		.i_max_cnt(6'd59),
 		.clk(i_timer_hou_clk),
 		.i_cntdwn_mode(i_timer_en),
-		.rst_n(rst_n));
-/*
-
-module	hms_cntdwn(
-		o_hms_cnt,
-		o_min_hit,
-		i_max_cnt,
-		clk,
-		i_cntdwn_mode,
-		rst_n);
-
-output	[5:0]	o_hms_cnt		;
-output		     o_min_hit		;
-
-input	[5:0]	 i_max_cnt		   ;
-input		      clk			        ;
-input		      rst_n			      ;
-input [1:0]  i_cntdwn_mode ;
-
-reg	[5:0]	o_hms_cnt		   ;
-reg		     o_min_hit		   ;
-reg       o_max_hit     ;
-
-
-
-always @(posedge clk or negedge rst_n) begin
-	if(rst_n == 1'b0) begin
-		o_hms_cnt <= 6'd0;
-		o_min_hit <= 1'b0;
-	end else begin
-	  case(i_cntdwn_mode)
-	    2'b00 : begin
-	      o_hms_cnt <= 6'd0;
-	      o_min_hit <= 1'b0;
-	    end
-	    2'b01 : begin
-	      if(o_hms_cnt >= i_max_cnt) begin
-			     o_hms_cnt <= 6'd0;
-		    end else begin
-			     o_hms_cnt <= o_hms_cnt + 1'b1;
-		    end
-		  end
-		 2'b10 : begin
-		    if(o_hms_cnt == 6'd0) begin
-			     o_hms_cnt <= i_max_cnt;
-			     o_min_hit <= 1'b1;
-		    end else begin  
-			     o_hms_cnt <= o_hms_cnt - 1'b1;
-			     o_min_hit <= 1'b0;
-		    end
-	   end
-	  endcase
-	 end
-end
-
-endmodule
-
-*/
-
-
+		.rst_n(rst_n),
+		.find_cntdwn(find_cntdwn));
 		
 reg	[5:0]	o_sec		;
 reg	[5:0]	o_min		;
@@ -1028,6 +982,11 @@ always @ (*) begin
 		      o_sec = timer_sec;
 			    o_min = timer_min;
 			    o_hou = timer_hou;
+				  if(((6'd0 == timer_sec) && (6'd0 == timer_min) && (6'd0 == timer_hou))&&(i_timer_en == 2'b10)) begin
+						o_sec = 6'd0;
+						o_min = 6'd0;
+						o_hou = 6'd0;
+				  end
 	 end
 	endcase
 end
@@ -1056,9 +1015,10 @@ always @(posedge clk or negedge rst_n) begin
 	   end else begin
 		if(((6'd0 == timer_sec) && (6'd0 == timer_min) && (6'd0 == timer_hou))&&(i_timer_en == 2'b10)) begin
 			  o_timer <= 1'b1;
-			  i_timer_en <= i_timer_en + 2'b10;
+			  find_cntdwn_1 <= find_cntdwn + 1'b1;
 		end else begin
 			  o_timer <= 1'b0 ;
+			  find_cntdwn_1 <= 1'b0;
 		end
 	end
 end
@@ -1391,7 +1351,6 @@ led_disp u_led_disp (
 endmodule
 
   
-
 
 
 
